@@ -1,11 +1,17 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Post Model
+ */
+
 namespace App\Models;
 
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use App\Models\Tag;
 
 class Post extends Model
 {
@@ -18,20 +24,20 @@ class Post extends Model
         'slug',
         'category_id',
     ];
-	
+
+    // author user
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-	
-	protected static function booted()
-	{
-		// Delete comments on post deletion
-		static::deleting(function ($post) {
-			$post->comments()->delete();
-		});
-	}
 
+    protected static function booted()
+    {
+        // Delete comments on post deletion
+        static::deleting(function ($post) {
+            $post->comments()->delete();
+        });
+    }
 
     // Relationships
     public function tags()

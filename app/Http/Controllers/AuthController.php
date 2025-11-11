@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Auth Controller
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -9,11 +15,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // register form
     public function showRegisterForm()
     {
         return view('auth.register');
     }
 
+    // register new user
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -33,11 +41,13 @@ class AuthController extends Controller
         return redirect()->route('posts.index');
     }
 
+    // login form
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
+    // login request
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -55,6 +65,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    // logout user
     public function logout(Request $request)
     {
         Auth::logout();

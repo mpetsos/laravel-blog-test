@@ -29,7 +29,7 @@
       <option value="">-- none --</option>
       @foreach($categories as $c)
         <option value="{{ $c->id }}" {{ old('category_id') == $c->id ? 'selected' : '' }}>
-            {{ $c->name }}
+            @if($c->parent_id) {{'--'}}@endif {{ $c->name }}
         </option>
       @endforeach
     </select>

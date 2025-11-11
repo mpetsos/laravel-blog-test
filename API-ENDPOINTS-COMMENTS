@@ -1,34 +1,16 @@
-# 📝 Project Notes & API Demo Setup
+//***** NOTES *****//
 
-## 🔑 Demo Access and Roles
+1. I created an "Admin" user who has the ability to edit or delete categories (login: admin@example.com - password: admin123). The user has been assigned the role = "admin" in the database, while others get "user".
 
-| User Type | Email | Password | Role | Notes |
-| :--- | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@example.com` | `admin123` | `admin` | Has the ability to **edit or delete categories**. |
-| **Standard User** | *(Various)* | *(Various)* | `user` | Standard user role in the database. |
+2. In the seeders, I created posts, comments, tags, etc., for the demo.
 
-## 📦 Demo Data
+3. I created a form for the user to get an API Token (http://localhost:8000/api-auth.html).
 
-* The database **seeders** were used to populate the application with **demo data** including **posts, comments, and tags**.
+4. I created test code for the API endpoints (using php and cUrl):
 
----
-
-## 🚀 API Access & Testing
-
-### 🔑 Get Your API Token
-
-A form is available to help users obtain an **API Token** for authenticated requests:
-
-* **Endpoint:** `http://localhost:8000/api-auth.html`
-
-### 💻 API Endpoint Test Code (PHP/cURL)
-
-The following PHP script demonstrates how to interact with the API endpoints using `cURL`. **Remember to replace the placeholder token** with one generated from the link above.
-
-```php
 <?php
 $apiBase = 'http://localhost:8000/api';
-$token = 'YOUR_API_TOKEN'; // Replace with your login token
+$token = '8|WTCuNan6tgmSrv2wxsfOzIuLiSOFd4lXLAGufMWi400d92b9'; // Replace with login token
 
 function callApi($url, $method='GET', $data=null, $token=null){
     $ch = curl_init($url);
@@ -60,9 +42,9 @@ function callApi($url, $method='GET', $data=null, $token=null){
 }
 
 /**
- ** TEST ENDPOINTS
- ** uncomment the desired function call for testing
- **/
+** TEST ENDPOINTS
+** uncomment the endpoint for test
+**/
 
 //**list all posts (with filters)
 $url = $apiBase . '/posts?author_id=1&tags=2,3&category_id=1';
@@ -114,3 +96,9 @@ $userId = 18;
 
 //** return all categories
 callApi($apiBase."/categories", 'GET', null, $token);
+
+
+
+
+
+

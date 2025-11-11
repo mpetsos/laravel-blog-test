@@ -1,11 +1,17 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Notificatios
+ */
+
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\Comment;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class NewCommentNotification extends Notification
 {
@@ -25,11 +31,12 @@ class NewCommentNotification extends Notification
 
     public function toMail($notifiable)
     {
+        // change the message text
         return (new MailMessage)
-                    ->subject('New Comment on Your Post')
-                    ->line("A new comment has been added to your post: '{$this->comment->post->title}'")
-                    ->line("Comment: {$this->comment->content}")
-                    ->action('View Post', url("/posts/{$this->comment->post->id}/{$this->comment->post->slug}"))
-                    ->line('Thank you for using our blog!');
+            ->subject('New Comment on Your Post')
+            ->line("A new comment has been added to your post: '{$this->comment->post->title}'")
+            ->line("Comment: {$this->comment->content}")
+            ->action('View Post', url("/posts/{$this->comment->post->id}/{$this->comment->post->slug}"))
+            ->line('Thank you for using our blog!');
     }
 }

@@ -1,13 +1,19 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Comment model
+ */
+
 namespace App\Models;
 
+use App\Notifications\NewCommentNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Notifications\NewCommentNotification;
 // Import the models used in relationships
-use App\Models\Post; 
-use App\Models\User; 
+use App\Models\Post;
+use App\Models\User;
 
 class Comment extends Model
 {
@@ -19,8 +25,7 @@ class Comment extends Model
     {
         // Notify post author when a new comment is created
         static::created(function ($comment) {
-            // Note: This relies on $comment->post->user working
-            $postAuthor = $comment->post->user; 
+            $postAuthor = $comment->post->user;
             if ($postAuthor) {
                 $postAuthor->notify(new NewCommentNotification($comment));
             }
@@ -28,7 +33,7 @@ class Comment extends Model
     }
 
     // Relationships
-    
+
     /**
      * Get the post that the comment belongs to.
      */
@@ -44,11 +49,9 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
-     * Get the author of the comment. 
-     * This method resolves the "Call to undefined relationship [author]" error 
-     * by explicitly defining the 'author' relationship the controller expects.
+     * Get the author of the comment.
      */
     public function author()
     {

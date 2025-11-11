@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Controller
+ */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -10,4 +16,3 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 }
-

@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Category Model
+ */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,4 +48,3 @@ class Category extends Model
         });
     }
 }
-

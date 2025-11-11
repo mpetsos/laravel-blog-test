@@ -12,7 +12,7 @@
         <option value="">All Categories</option>
         @foreach(App\Models\Category::all() as $category)
             <option value="{{ $category->id }}" @selected(request('category') == $category->id)>
-                {{ $category->name }}
+               @if($category->parent_id) {{'--'}}@endif  {{ $category->name }}
             </option>
         @endforeach
     </select>

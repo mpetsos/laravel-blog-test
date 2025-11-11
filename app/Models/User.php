@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Users Model
+ */
+
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -16,9 +22,17 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
-	
-    protected $fillable = ['name','email','password'];
-    protected $hidden = ['password','remember_token'];
-    public function posts() { return $this->hasMany(Post::class); }
-    public function comments() { return $this->hasMany(Comment::class); }
+
+    protected $fillable = ['name', 'email', 'password'];
+    protected $hidden = ['password', 'remember_token'];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -1,11 +1,17 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * API Comments Controller
+ */
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -20,12 +26,13 @@ class CommentController extends Controller
     {
         // Find post robustly, using withoutGlobalScopes to bypass any potential filters
         $post = Post::withoutGlobalScopes()->findOrFail($id);
-        
+
         // Retrieve and return all comments for that post, loading the author
-        $comments = $post->comments()
-                        ->with('author')
-                        ->latest()
-                        ->get();
+        $comments = $post
+            ->comments()
+            ->with('author')
+            ->latest()
+            ->get();
 
         return response()->json([
             'message' => 'Comments retrieved successfully',
@@ -44,9 +51,9 @@ class CommentController extends Controller
     {
         // Fetch comments matching the provided user ID, loading author and post relationships
         $comments = Comment::where('user_id', $userId)
-                        ->with(['author', 'post'])
-                        ->latest()
-                        ->get();
+            ->with(['author', 'post'])
+            ->latest()
+            ->get();
 
         // Return 404 if no comments are found for the user
         if ($comments->isEmpty()) {
@@ -60,7 +67,6 @@ class CommentController extends Controller
             'data' => $comments
         ], 200);
     }
-
 
     /**
      * Store a newly created comment for a specific post.
@@ -78,7 +84,7 @@ class CommentController extends Controller
 
         // Look up post robustly
         $post = Post::withoutGlobalScopes()->findOrFail($id);
-        
+
         // Assign authenticated user ID
         $data['user_id'] = $request->user()->id;
 

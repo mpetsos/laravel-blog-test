@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Laravel Blog Test
+ * by Thomas
+ * Posts Controller
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Category;
@@ -12,9 +18,6 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
-    /**
-     * Apply middleware.
-     */
     public function __construct()
     {
         // Only guests can see index & show. Auth required for create/edit/delete.
@@ -89,20 +92,20 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        // ✅ Collect all tag IDs
+        // Collect all tag IDs
         $tagIds = $request->input('tags', []);
 
-        // ✅ Add the "new" tag automatically
+        // Add the "new" tag automatically
         $newTag = Tag::firstOrCreate(
             ['slug' => 'new'],
             ['name' => 'new']
         );
 
-        // ✅ Merge and remove duplicates
+        // Merge and remove duplicates
         $tagIds[] = $newTag->id;
         $tagIds = array_unique($tagIds);
 
-        // ✅ Sync all tags
+        // Sync all tags
         $post->tags()->sync($tagIds);
 
         return redirect()
@@ -137,12 +140,12 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        // 🔒 Make sure only the author can edit
+        // Make sure only the author can edit
         if ($post->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
 
-        // ✅ Validate input
+        // Validate input
         $request->validate([
             'title' => [
                 'required',
@@ -153,16 +156,16 @@ class PostController extends Controller
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array|nullable',
-            'tags.*' => 'exists:tags,id',  // ✅ IDs from multi-select
+            'tags.*' => 'exists:tags,id',
         ], [
             'title.unique' => 'A post with this title already exists.',
         ]);
 
-        // 🧠 Track original values
+        // Track original values
         $originalTitle = $post->title;
         $originalContent = $post->content;
 
-        // 📝 Update post fields
+        // Update post fields
         $post->update([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -170,22 +173,22 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        // 🏷️ Collect tags from multi-select
+        // Collect tags from multi-select
         $tagIds = $request->input('tags', []);
 
-        // 🕵️ Detect if title or content changed
+        // Detect if title or content changed
         $titleChanged = $originalTitle !== $post->title;
         $contentChanged = $originalContent !== $post->content;
 
         if ($titleChanged || $contentChanged) {
-            // ✅ Add "edited" tag automatically
+            // Add "edited" tag automatically
             $editedTag = Tag::firstOrCreate(
                 ['slug' => 'edited'],
                 ['name' => 'edited']
             );
             $tagIds[] = $editedTag->id;
 
-            // ✅ Keep "new" tag if already attached
+            // Keep "new" tag if already attached
             $newTag = Tag::firstOrCreate(
                 ['slug' => 'new'],
                 ['name' => 'new']
@@ -193,7 +196,7 @@ class PostController extends Controller
             $tagIds[] = $newTag->id;
         }
 
-        // ✅ Remove duplicates and sync tags
+        // Remove duplicates and sync tags
         $post->tags()->sync(array_unique($tagIds));
 
         return redirect()
