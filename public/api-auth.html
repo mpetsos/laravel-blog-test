@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Login Form</title>
+<style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; }
+    input, button { padding: 10px; margin: 5px 0; width: 95%; font-size: 16px; }
+    button.loginBtn { cursor: pointer; background-color: #007BFF; color: white; border: none; border-radius: 5px;width:100%; }
+    button.loginBtn:hover { background-color: #0056b3; }
+    .container { border: 1px solid #ddd; padding: 20px; border-radius: 5px;width:100%;max-width:600px; }
+    .response { margin-top: 10px; padding: 10px; border-radius: 5px; font-size: 14px; word-break: break-all; }
+    .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; position: relative; }
+    .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    .copy-btn {
+        background: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 6px 8px;
+        font-size: 12px;
+        cursor: pointer;
+		margin-top:10px;
+		display:inline-block;
+    }
+    .copy-btn:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+
+<h2>Login for get your API Token</h2>
+<div class="container">
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()" class="loginBtn">Login</button>
+    <div id="loginResponse" class="response"></div>
+</div>
+
+<script>
+const apiBase = 'http://localhost:8000/api'; // Adjust your API base URL
+
+function showMessage(elementId, message, type='success', token=null){
+    const el = document.getElementById(elementId);
+    el.className = `response ${type}`;
+
+    if(token){
+        el.innerHTML = `
+            ${message}
+            <button class="copy-btn" onclick="copyToken('${token}')">Copy token</button>
+        `;
+    } else {
+        el.innerHTML = message;
+    }
+}
+
+function copyToken(token){
+    navigator.clipboard.writeText(token).then(() => {
+        alert('✅ Token copied to clipboard!');
+    }).catch(err => {
+        alert('❌ Failed to copy token: ' + err);
+    });
+}
+
+function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    fetch(`${apiBase}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json().then(data => ({status: res.status, body: data})))
+    .then(res => {
+        if(res.status === 200 && res.body.token){
+            showMessage(
+                'loginResponse',
+                `✅ Login successful!<br>Token: <strong>${res.body.token}</strong>`,
+                'success',
+                res.body.token
+            );
+            localStorage.setItem('apiToken', res.body.token);
+        } else {
+            let msg = '';
+            if(res.body.errors){
+                for(const key in res.body.errors){
+                    msg += `❌ ${res.body.errors[key].join(', ')}<br>`;
+                }
+            } else if(res.body.message){
+                msg = `❌ ${res.body.message}`;
+            } else {
+                msg = '❌ Login failed';
+            }
+            showMessage('loginResponse', msg, 'error');
+        }
+    })
+    .catch(err => showMessage('loginResponse', `❌ Network error: ${err}`, 'error'));
+}
+</script>
+
+</body>
+</html>

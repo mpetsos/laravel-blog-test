@@ -1,0 +1,43 @@
+/* custom css */
+
+img.logo-top{
+	width:100%;
+	max-width:100px;
+	height:auto;
+}
+
+.footer{
+	display:block;
+	text-align:center;
+	margin:30px 0;
+}
+.footer p{
+	font-size:0.8em;
+	color:#666;
+}
+
+.post-buttons .btn{
+	padding:4px 8px 6px 8px;
+	line-height:1em;
+	font-size:0.9em;
+	margin:0 10px 0 0;
+}
+/*pagination style*/
+.pagination {
+    margin-top: 1rem;
+}
+.page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+.page-item .page-link {
+    border-radius: 8px;
+    margin: 0 3px;
+}
+.page-item.disabled .page-link {
+    color: #6c757d;
+}
+.bottom-pagination p.small{
+	display:none;
+}
