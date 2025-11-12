@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        /* New Dark Blue Color Palette */
+        :root {
+            --dark-blue: #0056b3; /* Darker blue for accents */
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: var(--light-bg);
+            color: #333;
+            display: flex; /* Centers the content block */
+            justify-content: center;
+        }
+
+        /* Container to limit width and center content */
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Limits the max width of the documentation */
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            border-bottom: 2px solid var(--dark-blue);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #343a40;
+            margin-top: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--dark-blue); /* Used the darker blue */
+            color: white;
+            font-weight: bold;
+            width: 20%;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #c82333;
+        }
+        pre {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        /* Style for the Navigation Menu */
+        #navigation-menu {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        #navigation-menu h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+            color: var(--dark-blue);
+        }
+        #navigation-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #navigation-menu li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>API Documentation: Laravel Blog test</h1>
+        <p>Base URL: <code>http://localhost:8000</code></p>
+
+
+        <div id="navigation-menu">
+            <h2>Endpoints Index</h2>
+            <ul>
+                <li><a href="#get-posts">GET /posts</a> - Retrieves a list of all available posts.</li>
+                <li><a href="#post-posts">POST /posts</a> - Create a new post.</li>
+                <li><a href="#get-posts-id-slug">GET /posts/{$postId}/{$slug}</a> - Get a post by id and slug.</li>
+                <li><a href="#put-posts-id">PUT /posts/{$postId}</a> - Update a post by id (if is the author).</li>
+                <li><a href="#delete-posts-id">DELETE /posts/{$postId}</a> - Delete a post by id (if is the author).</li>
+                <li><a href="#post-posts-id-comments">POST /posts/{$postId}/comments</a> - Create a new comment for post by id.</li>
+                <li><a href="#get-users-id-posts">GET /users/{$userId}/posts</a> - List posts by user id.</li>
+                <li><a href="#get-users-id-comments">GET /users/{$userId}/comments</a> - List comments by user id.</li>
+                <li><a href="#get-categories">GET /categories</a> - List all categories.</li>
+            </ul>
+        </div>
+
+
+        <table id="get-posts">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>GET /posts</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Retrieves a list of all available posts.</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <p>None</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (200 OK)</th>
+                <td>
+                    <pre>[{
+        "id": 1,
+        "user_id": 1,
+        "category_id": 1,
+        "title": "My Post",
+        "slug": "my-post",
+        "content": "Post content here.",
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-11T12:22:36.000000Z",
+        "author": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@example.com"
+        },
+        "tags": [{
+                "id": 1,
+                "name": "new",
+                "pivot": {
+                    "post_id": 1,
+                    "tag_id": 1
+                }
+            },...
+        ],
+        "category": {
+            "id": 1,
+            "name": "Tempora"
+        }
+    } .... ]</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="post-posts">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>POST /posts</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Create a new post</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>{
+    "title": "My New Post",
+    "slug": "my-new-post",
+    "content": "This is the content of the post.",
+    "category_id": 1,
+    "tags": [3, 4]
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (201 Created)</th>
+                <td>
+                    <pre>{
+    "title": "My New Post test",
+    "slug": "my-new-post-test",
+    "content": "This is the content of the post.",
+    "category_id": 1,
+    "tags": [3, 4]
+} {
+    "title": "My New Post test",
+    "content": "This is the content of the post.",
+    "category_id": 1,
+    "user_id": 1,
+    "slug": "my-new-post-test",
+    "updated_at": "2025-11-12T11:01:14.000000Z",
+    "created_at": "2025-11-12T11:01:14.000000Z",
+    "id": 40,
+    "tags": [{
+            "id": 1,
+            "name": "new",
+            "slug": "new",
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-10T17:55:38.000000Z",
+            "pivot": {
+                "post_id": 40,
+                "tag_id": 1
+            }
+        },....],
+    "author": {
+        "id": 1,
+        "name": "Admin",
+        "email": "admin@example.com",
+        "email_verified_at": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z",
+        "role": "admin"
+    },
+    "category": {
+        "id": 1,
+        "name": "Tempora",
+        "slug": "tempora",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+    }
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response (title exists)</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "A post with this title already exists. Please choose a different title."
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="get-posts-id-slug">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>GET /posts/{$postId}/{$slug}</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Get a post by id and slug</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>None</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (200 OK)</th>
+                <td>
+                    <pre>{
+    "id": 2,
+    "user_id": 1,
+    "category_id": 2,
+    "title": "Itaque libero iusto et possimus vel deleniti voluptatem.",
+    "slug": "itaque-libero-iusto-et-possimus-vel-deleniti-voluptatem-361",
+    "content": "Ex quas voluptas maiores laboriosam debitis. Eveniet voluptas laboriosam quis. Qui qui doloremque enim excepturi. Alias magni deleniti officiis et.\n\nQui iste voluptate nihil hic tempora rerum voluptas. Magnam veritatis cum accusantium repellat autem amet enim. Rem corporis minima deserunt et quas in.\n\nConsequuntur modi itaque modi accusamus quo sapiente. Beatae possimus enim nam assumenda molestias dignissimos. Aperiam porro harum deleniti.",
+    "created_at": "2025-11-10T17:55:38.000000Z",
+    "updated_at": "2025-11-10T17:55:38.000000Z",
+    "tags": [{
+            "id": 1,
+            "name": "new",
+            "slug": "new",
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-10T17:55:38.000000Z",
+            "pivot": {
+                "post_id": 2,
+                "tag_id": 1
+            }
+        }
+    ],
+    "author": {
+        "id": 1,
+        "name": "Admin",
+        "email": "admin@example.com",
+        "email_verified_at": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z",
+        "role": "admin"
+    },
+    "category": {
+        "id": 2,
+        "name": "Magnam",
+        "slug": "magnam",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+    }
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This Post does not exist."
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="put-posts-id">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>PUT /posts/{$postId}</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Update a post by id (if is the author)</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>{
+    "title": "Updated Post Title",
+    "content": "Updated content here.",
+    "tags": [5]
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (201 Created)</th>
+                <td>
+                    <pre>{
+    "id": 2,
+    "user_id": 1,
+    "category_id": 2,
+    "title": "Updated Post Title new",
+    "slug": "updated-post-title-new",
+    "content": "Updated content here.",
+    "created_at": "2025-11-10T17:55:38.000000Z",
+    "updated_at": "2025-11-12T11:16:31.000000Z",
+    "tags": [{
+            "id": 1,
+            "name": "new",
+            "slug": "new",
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-10T17:55:38.000000Z",
+            "pivot": {
+                "post_id": 2,
+                "tag_id": 1
+            }
+        }, ....
+    ],
+    "author": {
+        "id": 1,
+        "name": "Admin",
+        "email": "admin@example.com",
+        "email_verified_at": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z",
+        "role": "admin"
+    },
+    "category": {
+        "id": 2,
+        "name": "Magnam",
+        "slug": "magnam",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+    }
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response (title exists)</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "A post with this title already exists. Please choose a different title."
+}
+</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This Post does not exist."
+}
+</pre>
+                </td>
+            </tr>
+            </tr>
+            <tr>
+                <th>Error Response (no author)</th>
+                <td>
+                    <pre>{
+    "message":"You are not authorized to update this post."
+}</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="delete-posts-id">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>DELETE /posts/{$postId}</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Delete a post by id (if is the author)</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>None</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (201 Created)</th>
+                <td>
+                    <pre>{
+    "message":"Post deleted successfully"
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This Post does not exist."
+}
+</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response (no author)</th>
+                <td>
+                    <pre>{
+    "message":"You are not authorized to delete this post."
+}</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="post-posts-id-comments">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>POST /posts/{$postId}/comments</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>Create a new comment for post by id</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>{
+    "content":"This is a comment on the post."
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (201 Created)</th>
+                <td>
+                    <pre>{
+    "message": "Comment created successfully",
+    "data": {
+        "content": "This is a comment on the post.",
+        "user_id": 1,
+        "post_id": 1,
+        "updated_at": "2025-11-12T11:26:11.000000Z",
+        "created_at": "2025-11-12T11:26:11.000000Z",
+        "id": 35,
+        "post": {
+            "id": 1,
+            "user_id": 1,
+            "category_id": 1,
+            "title": "Updated Post Title",
+            "slug": "updated-post-title",
+            "content": "Updated content here.",
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-11T12:22:36.000000Z",
+            "user": {
+                "id": 1,
+                "name": "Admin",
+                "email": "admin@example.com",
+                "email_verified_at": null,
+                "created_at": "2025-11-10T17:55:38.000000Z",
+                "updated_at": "2025-11-10T17:55:38.000000Z",
+                "role": "admin"
+            }
+        },
+        "author": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@example.com",
+            "email_verified_at": null,
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-10T17:55:38.000000Z",
+            "role": "admin"
+        }
+    }
+}</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This Post does not exist."
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="get-users-id-posts">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>GET /users/{$userId}/posts</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>List posts by user id</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>None</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (200 OK)</th>
+                <td>
+                    <pre>[{
+        "id": 1,
+        "user_id": 1,
+        "category_id": 1,
+        "title": "Updated Post Title",
+        "slug": "updated-post-title",
+        "content": "Updated content here.",
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-11T12:22:36.000000Z",
+        "tags": [{
+                "id": 1,
+                "name": "new",
+                "slug": "new",
+                "created_at": "2025-11-10T17:55:38.000000Z",
+                "updated_at": "2025-11-10T17:55:38.000000Z",
+                "pivot": {
+                    "post_id": 1,
+                    "tag_id": 1
+                }
+            },....
+        ],
+        "category": {
+            "id": 1,
+            "name": "Tempora",
+            "slug": "tempora",
+            "parent_id": null,
+            "created_at": "2025-11-10T17:55:38.000000Z",
+            "updated_at": "2025-11-10T17:55:38.000000Z"
+        }
+}]</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This User does not exist"
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="get-users-id-comments">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>GET /users/{$userId}/comments</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>List comments by user id</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>None</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (200 OK)</th>
+                <td>
+                    <pre>[{
+        "id": 28,
+        "post_id": 38,
+        "user_id": 1,
+        "content": "test comment",
+        "created_at": "2025-11-11T17:24:09.000000Z",
+        "updated_at": "2025-11-11T17:24:09.000000Z",
+        "post": {
+            "id": 38,
+            "user_id": 18,
+            "category_id": 1,
+            "title": "My New Post",
+            "slug": "my-new-post",
+            "content": "This is the content of the post. sdd",
+            "created_at": "2025-11-11T11:55:09.000000Z",
+            "updated_at": "2025-11-11T12:18:56.000000Z"
+        }
+    }, {
+        "id": 26,
+        "post_id": 38,
+        "user_id": 1,
+        "content": "another comment",
+        "created_at": "2025-11-11T16:54:15.000000Z",
+        "updated_at": "2025-11-11T16:54:15.000000Z",
+        "post": {
+            "id": 38,
+            "user_id": 18,
+            "category_id": 1,
+            "title": "My New Post",
+            "slug": "my-new-post",
+            "content": "This is the content of the post. sdd",
+            "created_at": "2025-11-11T11:55:09.000000Z",
+            "updated_at": "2025-11-11T12:18:56.000000Z"
+        }
+    }....]</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Error Response 404</th>
+                <td>
+                    <pre>{
+    "status": "error",
+    "message": "This User does not exist"
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="get-categories">
+            <tr>
+                <th>Endpoint</th>
+                <td><code>GET /categories</code></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>List all categories</td>
+            </tr>
+            <tr>
+                <th>Request (Headers/Body)</th>
+                <td>
+                    <p><strong>Headers:</strong></p>
+                    <pre>{
+    "Content-Type: application/json",
+    "Accept: application/json",
+    "Authorization: Bearer [token]"
+}</pre>
+                    <p><strong>Body:</strong></p>
+                    <pre>None</pre>
+                </td>
+            </tr>
+            <tr>
+                <th>Success Response (200 OK)</th>
+                <td>
+                    <pre>[{
+        "id": 1,
+        "name": "Tempora",
+        "slug": "tempora",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+    }, {
+        "id": 2,
+        "name": "Magnam",
+        "slug": "magnam",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+    }, {
+        "id": 3,
+        "name": "Corporis",
+        "slug": "corporis",
+        "parent_id": null,
+        "created_at": "2025-11-10T17:55:38.000000Z",
+        "updated_at": "2025-11-10T17:55:38.000000Z"
+}....]</pre>
+                </td>
+            </tr>
+        </table>
+
+    </div> 
+</body>
+</html>

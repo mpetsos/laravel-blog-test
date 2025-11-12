@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -77,24 +78,33 @@ class CommentController extends Controller
      */
     public function store(Request $request, $id)
     {
-        // Validate request
-        $data = $request->validate([
-            'content' => 'required|string|max:1000',
-        ]);
+        try {
+            // Validate request
+            $data = $request->validate([
+                'content' => 'required|string|max:1000',
+            ]);
 
-        // Look up post robustly
-        $post = Post::withoutGlobalScopes()->findOrFail($id);
+            // Look up post robustly
+            $post = Post::withoutGlobalScopes()->findOrFail($id);
 
-        // Assign authenticated user ID
-        $data['user_id'] = $request->user()->id;
+            // Assign authenticated user ID
+            $data['user_id'] = $request->user()->id;
 
-        // Create comment via the relationship
-        $comment = $post->comments()->create($data);
+            // Create comment via the relationship
+            $comment = $post->comments()->create($data);
 
-        // Return comment with author relationship
-        return response()->json([
-            'message' => 'Comment created successfully',
-            'data' => $comment->load('author')
-        ], 201);
+            // Return comment with author relationship
+            return response()->json([
+                'message' => 'Comment created successfully',
+                'data' => $comment->load('author')
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'status' => 'error',
+                    'message' => 'This Post does not exist '
+                ], 404)
+            );
+        }
     }
 }

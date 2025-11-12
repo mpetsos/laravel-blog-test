@@ -1,6 +1,6 @@
 <?php
 $apiBase = 'http://localhost:8000/api';
-$token = '8|WTCuNan6tgmSrv2wxsfOzIuLiSOFd4lXLAGufMWi400d92b9'; // Replace with login token
+$token = '9|K4n2c84sS0jsH0sPAFNWIA5nQDUdzeeM9ZzNtOza577c41ac'; // Replace with login token
 
 function callApi($url, $method='GET', $data=null, $token=null){
     $ch = curl_init($url);
@@ -8,9 +8,9 @@ function callApi($url, $method='GET', $data=null, $token=null){
     
     $headers = ['Content-Type: application/json','Accept: application/json'];
     if($token) $headers[] = 'Authorization: Bearer ' . $token;
-    
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+echo json_encode($data);
     if($method === 'POST'){
         curl_setopt($ch, CURLOPT_POST, true);
         if($data) curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -25,8 +25,8 @@ function callApi($url, $method='GET', $data=null, $token=null){
     if(curl_errno($ch)){
         echo 'Error:' . curl_error($ch);
     } else {
-        $responseData = json_decode($response, true);
-        print_r($responseData);
+       // $responseData = json_decode($response, true);///php array
+        echo $response;
     }
     curl_close($ch);
 }
@@ -36,15 +36,15 @@ function callApi($url, $method='GET', $data=null, $token=null){
 ** uncomment the endpoint for test
 **/
 
-//**list all posts (with filters)
-$url = $apiBase . '/posts?author_id=1&tags=2,3&category_id=1';
+//**list all posts
+$url = $apiBase . '/posts';
 //callApi($url, 'GET', null, $token);
 
 
 //**create a new post
 $data = [
-    'title' => 'My New Post',
-    'slug' => 'my-new-post',
+    'title' => 'My New Post test',
+    'slug' => 'my-new-post-test',
     'content' => 'This is the content of the post.',
     'category_id' => 1,
     'tags' => [3,4] // array of tag IDs
@@ -52,40 +52,40 @@ $data = [
 //callApi($apiBase.'/posts', 'POST', $data, $token);
 
 //**get a post by id and slug
-$postId = 2;
+$postId = 233;
 $slug = 'itaque-libero-iusto-et-possimus-vel-deleniti-voluptatem-361';
 //callApi($apiBase."/posts/{$postId}/{$slug}", 'GET', null, $token);
 
 //** update a post by id
-$postId = 1;
+$postId = 7;
 $data = [
-    'title' => 'Updated Post Title',
+    'title' => 'Updated Post Title new',
     'content' => 'Updated content here.',
     'tags' => [5] // updated tags
 ];
-//callApi($apiBase."/posts/{$postId}", 'PUT', $data, $token);
+callApi($apiBase."/posts/{$postId}", 'PUT', $data, $token);
 
 //**delete a post by id
-$postId = 3;
+$postId = 7;
 //callApi($apiBase."/posts/{$postId}", 'DELETE', null, $token);
 
 //**create a new comment for post by id
-$postId = 36;
+$postId = 1;
 $data = [
     'content' => 'This is a comment on the post.'
 ];
 //callApi($apiBase."/posts/{$postId}/comments", 'POST', $data, $token);
 
 //**list posts by user id
-$userId = 1;
+$userId = 1888;
 //callApi($apiBase."/users/{$userId}/posts", 'GET', null, $token);
 
 //**list comments by user id
-$userId = 18;
+$userId = 1;
 //callApi($apiBase."/users/{$userId}/comments", 'GET', null, $token);
 
 //** return all categories
-callApi($apiBase."/categories", 'GET', null, $token);
+//callApi($apiBase."/categories", 'GET', null, $token);
 
 
 

@@ -21,7 +21,7 @@ A form is available to help users obtain an **API Token** for authenticated requ
 
 * **Endpoint:** `http://localhost:8000/api-auth.html`
 
-### 💻 API Endpoint Test Code (PHP/cURL)
+### 💻 API Endpoint Test Code (PHP/cURL) - You can find the API endpoints documentation at this file: API-DOCUMENTATION.html
 
 The following PHP script demonstrates how to interact with the API endpoints using `cURL`. **Remember to replace the placeholder token** with one generated from the link above.
 
@@ -64,8 +64,8 @@ function callApi($url, $method='GET', $data=null, $token=null){
  ** uncomment the desired function call for testing
  **/
 
-//**list all posts (with filters)
-$url = $apiBase . '/posts?author_id=1&tags=2,3&category_id=1';
+//**list all posts
+$url = $apiBase . '/posts';
 //callApi($url, 'GET', null, $token);
 
 

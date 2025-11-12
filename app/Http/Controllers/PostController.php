@@ -79,7 +79,7 @@ class PostController extends Controller
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array|nullable',
-            'tags.*' => 'exists:tags,id',  // ✅ validate IDs from select
+            'tags.*' => 'exists:tags,id',
         ], [
             'title.unique' => 'A post with this title already exists.',
         ]);
@@ -198,7 +198,6 @@ class PostController extends Controller
 
         // Remove duplicates and sync tags
         $post->tags()->sync(array_unique($tagIds));
-
         return redirect()
             ->route('posts.index')
             ->with('success', 'Post updated successfully.');

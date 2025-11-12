@@ -35,7 +35,7 @@ class NewCommentNotification extends Notification
             ->subject('New Comment on Your Post')
             ->line("A new comment has been added to your post: '{$this->comment->post->title}'")
             ->line("Comment: {$this->comment->content}")
-            ->action('View Post', url("/posts/{$this->comment->post->id}/{$this->comment->post->slug}"))
+            ->action('View Post', url("/posts/{$this->comment->post->id}"))
             ->line('Thank you for using our blog!');
     }
 }
