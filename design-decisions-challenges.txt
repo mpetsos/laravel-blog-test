@@ -1,0 +1,18 @@
+Design decisions:
+
+For Design decisions, I used Laravel v12 and MySQL. For the design, I used the Bootstrap libraries and created a minimal layout. 
+Created a minimal layout with basic elements which, however, can be easily developed/expanded by designers (custom CSS, JS, etc. files).
+
+I took the initiative to create user roles (admin, user) to give the admin the ability to perform certain actions on the blog (e.g., to edit the categories).
+Another initiative was to create a form with filters, mostly for my own ease in searching and managing the posts.
+
+In the programming of the API, I used security code and tried to make it as user-friendly as possible for the end-user with the appropriate requests and responses.
+
+Generally, I tried to create secure code and make it as friendly as possible for editing by other developers with simple and fast functions, a friendly schema, and the appropriate comments within the code.
+
+
+
+Challenges:
+
+Generally, I did not face serious difficulties since I am familiar with similar applications. 
+I would say that I needed more time for the design of the application and less for the implementation.
